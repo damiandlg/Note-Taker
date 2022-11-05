@@ -173,38 +173,11 @@ const renderNoteList = async (notes) => {
 // Gets notes from the db and renders them to the sidebar
 const getAndRenderNotes = () => getNotes().then(renderNoteList);
 
-let saveNoteBtn;
-let newNoteBtn;
-let noteTitle;
-let noteText;
-
 if (window.location.pathname === '/notes') {
-  saveNoteBtn = document.querySelector('saveNoteBtn');
-  newNoteBtn = document.querySelector('newNoteBtn');
-  noteTitle = document.querySelector('noteTitle');
-  noteText = document.querySelector('noteText');
+  saveNoteBtn.addEventListener('click', handleNoteSave);
+  newNoteBtn.addEventListener('click', handleNewNoteView);
+  noteTitle.addEventListener('keyup', handleRenderSaveBtn);
+  noteText.addEventListener('keyup', handleRenderSaveBtn);
 }
-
-const show = (elem) => {
-  elem.style.display = 'inline';
-};
-
-const hide = (elem) => {
-  elem.style.display = 'none';
-};
-
-
-//Keeping track of Notes
-let activeNote = {};
-
-const getNote = (note) => 
-fetch('/api/notes' , {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-
 
 getAndRenderNotes();

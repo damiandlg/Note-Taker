@@ -1,22 +1,26 @@
 const express = require ("express");
 const fs = require ('fs');
 const path = require('path');
-const {notes} = require ('./db/db.json');
-const lib = require ('./notes')
+const notes = require ('./db/db.json');
+const lib = require ('./lib/notes')
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+
+const PORT = process.env.PORT || 3001;
 
 
 app.use(express.urlencoded({extended: true}));
-app.use(express.static('public'));
+
 app.use(express.json());
 
-function newNote(body, messageArray){
+app.use(express.static('public'));
+
+
+function createNewNote(body, messageArray){
   const note = body
   messageArray.push(note)
   fs.writeFileSync(
-    path.join(__dirname,"db/db.json"),
+    path.join(__dirname, './db/db.json'),
     JSON.stringify({notes: messageArray}, null, 2),
   )
   return note
@@ -46,5 +50,5 @@ app.get('/notes', (req, res) => {
 
 
 app.listen(PORT, () => {
-    console.log("API server now on https;//localhost/" + PORT );
+    console.log(`API server now on port ${PORT}!` );
   });
