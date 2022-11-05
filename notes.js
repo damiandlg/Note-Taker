@@ -1,29 +1,18 @@
-const router = require("express").Router();
+const fs = require("fs");
+const path = require("path");
+
+function newNote(body, messageArray) {
+    const note =body
+    messageArray.push(note)
+    fs.writeFileSync(
+        path.join(__dirname, 'db/db.json'),
+        JSON.stringify({notes: messageArray}, null,2),
+    )
+    return note
+}
 
 
-const {
-    notes
-} = require('../../db/db');
 
-const {
-    noteCreateNewNote,
-    noteDeleteNote
-} = require('../../lib/noteFunctions');
-
-router.get('/notes', (req, res) => {
-    let saved = notes;
-    res.json(saved);
-})
-
-router.post('/notes', (req, res) => {
-     req.body.id = notes.length.toString();
-    let note = noteCreateNewNote(req.body, notes);
-    res.json(note);
-})
-
-router.delete('/notes/:id', (req, res) => {
-    noteDeleteNote(notes, req.params.id);
-    res.json(notes);
- })
-
-module.exports = router;
+module.exports = {
+    newNote
+}
