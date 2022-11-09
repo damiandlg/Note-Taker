@@ -16,12 +16,8 @@ app.use(express.static('public'));
 
 //GET Function
 
-app.get('/api/notes', (req, res) => {
-  let results = notes
-  if(req.query){
-    results = lib.filterByQuery(req.query, results)
-  }
-  res.json(results)
+app.get("/api/notes", (req, res) => {
+  res.json(notesList.notes);
 });
 
 app.get('/', (req, res) => {
@@ -34,28 +30,21 @@ app.get('/notes', (req, res) => {
 
 // Create Note Function
 
-function createNewNote(body, messageArray){
+function createNewNote(body){
   const note = body;
-  if (!Array.isArray(notesArrayElements)) notesArrayElements = [];
-
-  if (notesArrayElements.length === 0) notesArrayElements.push(0);
-
-  body.id = notesArrayElements[0];
-  notesArrayElements[0]++;
-
-  notesArrayElements.push(note);
+  notesList.notes.push(note)
   fs.writeFileSync(
     path.join(__dirname, "./db/db.json"),
-    JSON.stringify(notesArrayElements, null, 2)
-  );
-  return note;
+    JSON.stringify(notesList)
+  )
 }
 
 //Post Function
 
 app.post('/api/notes', (req, res) => {
-  const note = newNote(req.body, notesList);
-  res.json(note);
+  console.log(req.body)
+  createNewNote(req.body)
+  res.send(200)
 });
 
 
